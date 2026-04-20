@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Scene {
+  id String @id @default (uuid())
+  name String 
+  description String
+  createdAt DateTime @default(now())
+
+  characters SceneCharacter[]
+}
+
+model Character {
+  id String @id @default (uuid())           //uuid p/ gerar id único
+  name String
+  personalityPrompt String
+  createdAt DateTime @default(now())
+
+  scenes SceneCharacter[]
+}
+
+model SceneCharacter {
+  sceneId String
+  characterId String
+  createdAt DateTime @default (now())       //data da criação da cena
+
+  scene Scene @relation(fields: [sceneId], references: [id])      //ligação dos IDs no banco de dados
+  character Character @relation(fields: [characterId], references: [id])
+
+  @@id([sceneId, characterId])      //junta os 2 ids para ser usado como o id da cena
+}
