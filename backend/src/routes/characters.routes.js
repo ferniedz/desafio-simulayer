@@ -5,7 +5,7 @@ const {
     getCharacterById,
     updateCharacterById,
     deleteCharacterById
-} = require("../controllers/characters");
+} = require("../controllers/characters.controllers");
 
 router.post("/", createCharacter);
 router.get("/:id", getCharacterById);

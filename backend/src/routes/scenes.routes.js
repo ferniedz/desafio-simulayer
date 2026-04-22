@@ -6,7 +6,7 @@ const {
     getSceneById,
     deleteSceneById,
     manageCharacterInScene
-} = require("../controllers/scenes");
+} = require("../controllers/scenes.controllers");
 
 router.post("/", createScene);
 router.get("/", getScenes);

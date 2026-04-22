@@ -35,7 +35,7 @@ model SceneCharacter {
   characterId String
   createdAt DateTime @default (now())       //data da criação da cena
 
-  scene Scene @relation(fields: [sceneId], references: [id])      //ligação dos IDs no banco de dados
+  scene Scene @relation(fields: [sceneId], references: [id], onDelete: Cascade)      //ligação dos IDs no banco de dados
   character Character @relation(fields: [characterId], references: [id])
 
   @@id([sceneId, characterId])      //junta os 2 ids para ser usado como o id da cena

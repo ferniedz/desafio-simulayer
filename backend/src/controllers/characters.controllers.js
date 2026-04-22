@@ -1,8 +1,14 @@
 const prisma = require("../lib/prisma");
+const { createCharacterSchema, updateCharacterByIdSchema } = require("../validators/character.validator")
 
 const createCharacter = async (req, res) => {
     try {
-        const { name, personalityPrompt } = req.body;
+        const validation = createCharacterSchema.safeParse(req.body);
+        if (!validation.success) {
+            return res.status(400).json({ errors: validation.error.issues.map(e => e.message) });
+        }
+
+        const { name, personalityPrompt } = validation.data;
 
         const character = await prisma.character.create({
             data: { name, personalityPrompt },
@@ -37,16 +43,26 @@ const getCharacterById = async (req, res) => {
 const updateCharacterById = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, personalityPrompt } = req.body;
+
+        const validation = updateCharacterByIdSchema.safeParse(req.body);
+        if (!validation.success) {
+            return res.status(400).json({ errors: validation.error.issues.map(e => e.message) });
+        }
+
+        const { name, personalityPrompt } = validation.data;
+
+        const characterExists = await prisma.character.findUnique({
+            where: { id: id }
+        });
+
+        if (!characterExists) {     //se o personagem nao existir, prisma mandaria um erro que cairia direto no catch
+            return res.status(404).json({ message: "Character not found." });   //com essa parte, ele retorna um erro mais especifico
+        }
 
         const updatedCharacter = await prisma.character.update({
             where: { id: id },
             data: { name, personalityPrompt }
         });
-        
-        if(!updatedCharacter) {
-            return res.status(404).json({ message: "Character not found. " });
-        }
 
         res.status(200).json(updatedCharacter);
 
