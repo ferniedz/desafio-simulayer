@@ -1,0 +1,115 @@
+const prisma = require("../lib/prisma");
+
+const createScene = async (req, res) => {
+    try {
+        const { name, description } = req.body;
+
+        const scene = await prisma.scene.create({
+            data: { name, description }
+        });
+
+        res.status(201).json(scene);
+
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
+const getScenes = async (req, res) => {
+    try {
+        const scenes = await prisma.scene.findMany();
+        res.status(200).json(scenes); 
+    } catch (error) {
+        res.status(500).json({ error: error.message });     //erro interno do servidor
+    }
+}
+
+const getSceneById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const scene = await prisma.scene.findUnique({
+            where: { id },
+            include: { characters: { include: { character: true } } }
+        });
+
+        if (!scene) {
+            return res.status(404).json({ message: "Scene not found." });
+        }
+
+        res.status(200).json(scene);
+
+    } catch (error) {
+        res.status(400).json({ message: "Invalid ID." });
+    }
+}
+
+const deleteSceneById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const removedScene = await prisma.scene.delete({
+            where: { id }
+        });
+
+        res.status(200).json(removedScene);
+
+    } catch (error) {
+        res.status(400).json({ message: "Invalid ID." });
+    }
+}
+
+const manageCharacterInScene = async (req, res) => {
+    try {
+        const { id: sceneId } = req.params;     //pega o id da cena que é o mesmo da URL
+        const { characterId, action } = req.body;
+
+        const scene = await prisma.scene.findUnique({
+            where: { id: sceneId }
+        });
+
+        const character = await prisma.character.findUnique({
+            where: { id: characterId }
+        });
+
+        if (!scene) {
+            return res.status(404).json({ message: "Scene not found." });
+        }
+
+        if (!character) {
+            return res.status(404).json({ message: "Character not found." });
+        }
+
+        if (action == "add") {
+            const sceneCharacter = await prisma.sceneCharacter.create({
+                data: { sceneId, characterId }
+            });
+
+            return res.status(200).json(sceneCharacter);
+
+            }
+
+        if (action == "remove") {
+            const sceneCharacter = await prisma.sceneCharacter.delete({
+                where: { sceneId_characterId: { sceneId, characterId } }
+            });
+
+            return res.status(200).json(sceneCharacter);
+            
+            }
+
+        if (action != "add" && action != "remove") {
+            return res.status(400).json({ message: "Action must be 'add' or 'remove'." });
+        }
+
+    } catch (error) {
+        res.status(400).json({ message: "Invalid ID(s)." });
+    }
+}
+
+module.exports = {
+    createScene,
+    getScenes,
+    getSceneById,
+    deleteSceneById,
+    manageCharacterInScene
+}

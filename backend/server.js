@@ -9,6 +9,16 @@ app.use(express.json());
 
 const PORT = process.env.PORT;
 
+const sceneRoutes = require("./src/routes/scenes.routes");
+const characterRoutes = require("./src/routes/characters.routes");
+
+app.use("/scenes", sceneRoutes);
+app.use("/characters", characterRoutes);
+
+const errorHandler = require("./src/middlewares/errorHandler");
+
+app.use(errorHandler);
+
 app.listen(PORT, async() => {
-    console.log("O servidor está online e rodando na porta", PORT);
+    console.log("The server is online and running on port", PORT);
 });
