@@ -1,5 +1,6 @@
 const prisma = require("../lib/prisma");
-const { createSceneSchema, manageCharacterInSceneSchema } = require("../validators/scene.validator")
+const { createSceneSchema, manageCharacterInSceneSchema } = require("../validators/scene.validator");
+const { getScenesSchema } = require("../validators/pagination.validator");
 
 const createScene = async (req, res) => {
     try {
@@ -23,9 +24,34 @@ const createScene = async (req, res) => {
 
 const getScenes = async (req, res) => {
     try {
-        const scenes = await prisma.scene.findMany();
+        const validation = getScenesSchema.safeParse(req.query);
 
-        res.status(200).json(scenes);
+        if (!validation.success) {  //eu tinha feito isso para que o usuario mandasse dados p/ pagina e limite de cenas por pagina na query, mas resolvi tirar essa parte do meu projeto, so que deixei esse trecho para nao dar problema
+            return res.status(400).json({ message: "'Scenes' and 'limit' fields must be positive numbers." });
+        }   //mas acaba servindo como uma validacao extra
+
+        const { page, limit } = validation.data;
+
+        let skip = (page - 1) * limit;
+
+        const [total, scenes] = await Promise.all([
+            prisma.scene.count(),
+            prisma.scene.findMany({
+                skip: skip,
+                take: limit,
+                include: { characters: { include: { character: true } } }
+            })
+        ]);
+
+        res.status(200).json({
+            scenes,
+            "meta": {
+                "totalItems": total,
+                "totalPages": Math.ceil(total / limit),
+                "currentPage": page,
+                "itemsPerPage": limit
+            }
+        });
 
     } catch (error) {
         res.status(500).json({ error: error.message });     //erro interno do servidor
