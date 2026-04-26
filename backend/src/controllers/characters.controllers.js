@@ -21,6 +21,17 @@ const createCharacter = async (req, res) => {
     }
 }
 
+const getCharacters = async (req, res) => {     //funcao adicional apenas para o formulario de inserir personagem a cena no frontend
+    try {
+        const characters = await prisma.character.findMany({
+            orderBy: { createdAt: 'desc'}
+        });
+        res.status(200).json(characters);
+    } catch (err) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 const getCharacterById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -94,6 +105,7 @@ const deleteCharacterById = async (req, res) => {
     
 module.exports = {
     createCharacter,
+    getCharacters,
     getCharacterById,
     updateCharacterById,
     deleteCharacterById

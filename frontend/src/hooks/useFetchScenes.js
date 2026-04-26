@@ -34,7 +34,7 @@ function useFetchScenes(page = 1, limit = 9) {     //1 e 9 sao parametros defaul
     }, [page, limit]);
 
     useEffect(() => {
-        isMountedRef.current = true;    //estava tendo problema de erro de chamada sincrona e tirei isso da IA, favor considerar
+        isMountedRef.current = true;    //estava tendo problema de erro de chamada sincrona
         
         const fetchData = async() => {
             getScenes();
@@ -56,48 +56,3 @@ function useFetchScenes(page = 1, limit = 9) {     //1 e 9 sao parametros defaul
 }
 
 export default useFetchScenes;
-
-
-
-
-
-
-
-
-
-
-/* import { useState, useEffect, useCallback } from 'react';
- import api from "../services/api";
-
-function useFetchScenes(id) {
-    const [scene, setScene] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    const getScene = useCallback(async() => {
-        try {
-            const res = await api.get(`/scenes/${id}`);
-            setScene(res.data);
-        } catch (err) {
-            console.log("Error finding scenes.", err);
-        } finally {
-            setLoading(false);
-        }
-    }, [id]);
-
-    useEffect(() => {
-        if (id) {
-            getScene();
-        }
-    }, [id, getScene]);
-
-    return {
-        scene,
-        loading,
-        refresh: async() => {
-            setLoading(true);
-            await getScene();
-        }
-    };
-}
-
-export default useFetchScenes; */

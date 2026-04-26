@@ -4,6 +4,7 @@ import api from '../services/api';
 function useFetchSceneDetails(id) {
     const [scene, setScene] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const isMountedRef = useRef(true);
 
     const getDetails = useCallback(async () => {
@@ -19,7 +20,8 @@ function useFetchSceneDetails(id) {
                 setScene(res.data);
             }
         } catch (err) {
-            alert("Error loading scene details.", err);
+            console.error("Error loading scene details.", err);
+            setError("Error loading scene details.");
         } finally {
             if (isMountedRef.current) {
                 setLoading(false);

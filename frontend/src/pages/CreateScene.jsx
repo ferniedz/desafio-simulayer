@@ -1,17 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-
-const styles = {
-    container: "p-8 bg-slate-900 min-h-screen text-white flex flex-col items-center",
-    card: "bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-2xl w-full max-w-lg",
-    title: "text-3xl font-bold text-blue-400 mb-6 text-center",
-    label: "block text-sm font-medium text-slate-400 mb-1",
-    input: "w-full bg-slate-900 border border-slate-700 rounded-lg p-3 mb-4 focus:ring-2 focus:ring-blue-500 outline-none transition-all",
-    textArea: "w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors mb-6 h-32 resize-none",
-    btnSubmit: "w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-lg font-bold transition-all active:scale-95 disabled:opacity-50",
-    btnCancel: "mt-4 text-slate-500 hover:text-slate-300 transition-colors w-full text-center"
-}
+import styles from '../styles/globalStyles';
 
 function CreateScene() {
     const [name, setName] = useState('');
@@ -29,13 +19,12 @@ function CreateScene() {
         }
 
         setLoading(true);
-        setError(null);
 
         try {
             await api.post('/scenes', { name, description });
             navigate('/');
         } catch (err) {
-            setError("Server connection error.", err);
+            setError("Error server connection.", err);
         } finally {
             setLoading(false);
         }
@@ -61,7 +50,7 @@ function CreateScene() {
                     <label className={styles.label}>Description</label>
                     <textarea 
                         className={styles.textArea}
-                        placeholder="Description exemple."
+                        placeholder="Description exemple"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         disabled={loading}

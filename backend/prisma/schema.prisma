@@ -35,8 +35,8 @@ model SceneCharacter {
   characterId String
   createdAt DateTime @default (now())       //data da criação da cena
 
-  scene Scene @relation(fields: [sceneId], references: [id], onDelete: Cascade)      //ligação dos IDs no banco de dados; ao deletar uma cena, os personagens nao sao deletados do bd, apenas as relacoes entre eles e a cena deletada
-  character Character @relation(fields: [characterId], references: [id])
+  scene Scene @relation(fields: [sceneId], references: [id], onDelete: Cascade)      //ligação dos IDs no banco de dados; ao deletar uma cena, os personagens nao sao deletados do bd, apenas suas relacoes com a cena deletada
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
 
   @@id([sceneId, characterId])      //junta os 2 ids para ser usado como o id da cena
 }
