@@ -28,33 +28,3 @@ const styles = {
 }
 
 export default styles;
-
-//title: "text-xl font-bold text-blue-400 mb-2", vindo do ScenCards
-
-/*  container: "p-8 bg-slate-900 min-h-screen text-white flex flex-col items-center",
-    card: "bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-2xl w-full max-w-lg",
-    title: "text-3xl font-bold text-blue-400 mb-6 text-center",
-
-    vindos de CreateCharacter
-
-*/
-
-//btn: "bg-blue-600 hover:bg-blue-500 text-white w-full text-center block mt-4 py-2 rounded-lg font-semibold",
-
-/* container: "p-8 bg-slate-900 min-h-screen text-white flex flex-col items-center",
-    card: "bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-2xl w-full max-w-lg",
-    title: "text-3xl font-bold text-blue-400 mb-6 text-center",
-    label: "block text-sm font-medium text-slate-400 mb-1",
-    input: "w-full bg-slate-900 border border-slate-700 rounded-lg p-3 mb-4 focus:ring-2 focus:ring-blue-500 outline-none transition-all",
-    textArea: "w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors mb-6 h-32 resize-none",
-    btnSubmit: "w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-lg font-bold transition-all active:scale-95 disabled:opacity-50",
-    btnCancel: "mt-4 text-slate-500 hover:text-slate-300 transition-colors w-full text-center"
-    
-    vindos de CreaetScene */
-
-    /* 
-    container: "p-8 bg-slate-900 min-h-screen text-white",
-    
-    
-    title: "text-3xl font-bold text-blue-400 mb-2",
-    description: "mt-4 text-slate-300 leading-relaxed", */

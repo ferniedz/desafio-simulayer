@@ -43,7 +43,7 @@ function useFetchSceneDetails(id) {
         }
     }, [getDetails]);
 
-    return { scene, loading, refresh: getDetails };
+    return { scene, loading, error, refresh: getDetails };
 }
 
 export default useFetchSceneDetails;

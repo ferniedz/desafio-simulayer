@@ -1,25 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import Loading from '../components/Loading';
 import CharacterItem from '../components/CharacterItem';
+import useFetchCharacters from '../hooks/useFetchCharacters';
+import FeedbackMessage from '../components/FeedbackMessage';
 import useFetchSceneDetails from '../hooks/useFetchSceneDetails';
 import styles from  '../styles/globalStyles';
 
 function SceneDetails() {
     const { id } = useParams();
     const { scene, loading, refresh } = useFetchSceneDetails(id);
-    const [allCharacters, setAllCharacters] = useState([]);
     const [selectedCharacterId, setSelectedCharacterId] = useState("");
     const [addStatus, setAddStatus] = useState(null);
-    const [setError] = useState(null);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        api.get('/characters')
-            .then(res => setAllCharacters(res.data))
-            .catch(err => console.error("Error loading character.", err));
-    }, []);
+    const { characters: allCharacters } = useFetchCharacters();
 
     const handleRemoveCharacter = async (characterId) => {      //passado p/ o CharacterItem
         if (window.confirm("Remove this character from this scene?")) {
@@ -76,6 +73,8 @@ function SceneDetails() {
     return (
         <div className={styles.container}>
             <button onClick={() => navigate(-1)} className={styles.btnBack}>← Back</button>
+
+            <FeedbackMessage error={error} />
 
             <div className={styles.contentWrapper}>
                 <h1 className={styles.title}>{scene.name}</h1>

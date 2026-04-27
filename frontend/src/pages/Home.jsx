@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SceneCard from '../components/SceneCard';
 import Loading from '../components/Loading';
 import useFetchScenes from '../hooks/useFetchScenes';    //integracao com a API vem daqui
+import Pagination from '../components/Pagination';
 import styles from '../styles/globalStyles';
 
 function Home() {
@@ -41,27 +42,12 @@ function Home() {
                 ))}
             </main>
 
-            <footer className={styles.footer}>
-                <button
-                    onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
-                    disabled={currentPage === 1}        //pagina atual = verdadeiro
-                    className={`${styles.btnBase} ${styles.btnNav}`}>
-                    ← Previous
-                </button>
-
-                <span className="text-slate-400 font-medium">
-                    Page {currentPage}
-                </span>
-
-                <button
-                    onClick={() => setCurrentPage(p => p + 1)}
-                    disabled={scenes.length < LIMIT}
-                    className={`${styles.btnBase} ${styles.btnNav}`}
-                >
-                    Next →
-                </button>
-
-            </footer>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(scenes.length / LIMIT)} 
+                onPrev={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                onNext={() => setCurrentPage(p => p + 1)}
+            />
 
         </div>
     )

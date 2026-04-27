@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import FeedbackMessage from '../components/FeedbackMessage';
 import styles from '../styles/globalStyles';
 
 function CreateCharacter() {
     const [name, setName] = useState('');
     const [personalityPrompt, setPersonalityPrompt] = useState('');
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(null);
     const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setError(null);     //para evitar permanencia de resposta na tela
+        setSuccess(null);
 
         if (!name.trim() || !personalityPrompt.trim()) {
             setError("'Name' and 'personality prompt' fields are required.");
@@ -28,11 +32,10 @@ function CreateCharacter() {
                 name,
                 personalityPrompt
             });
-            setSuccess(true);
+            setSuccess("Character crated.");
             setName('');
             setPersonalityPrompt('');
-            setTimeout(() => navigate('/characters'), 1500);
-
+            setTimeout(() => navigate('/'), 1500);
         } catch (err) {
             setError("Server connection error.", err);
         } finally {
@@ -45,9 +48,7 @@ function CreateCharacter() {
             <div className={styles.card}>
                 <h1 className={styles.title}>Create new character</h1>
 
-                {error && <p className={styles.feedbackError}>{error}</p>}
-
-                {success && <p className={styles.feedbackSuccess}>Character created</p>}
+                <FeedbackMessage error={error} success={success} />
 
                 <form onSubmit={handleSubmit}>
                     <label className={styles.label}>Name</label>
@@ -84,7 +85,7 @@ function CreateCharacter() {
 
                     <button
                         type="button"
-                        onClick={() => navigate('/characters')}
+                        onClick={() => navigate('/')}
                         className={styles.btnCancel}
                         disabled={loading}
                     >

@@ -1,17 +1,23 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import FeedbackMessage from '../components/FeedbackMessage';
+import Pagination from '../components/Pagination';
 import styles from '../styles/globalStyles';
 
 function CreateScene() {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(null);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setError(null);
+        setSuccess(null);
 
         if (!name.trim() || !description.trim()) {
             setError("'Name' and 'description' fields are required.");
@@ -22,7 +28,10 @@ function CreateScene() {
 
         try {
             await api.post('/scenes', { name, description });
-            navigate('/');
+            setSuccess("Scene created.");
+            setName('');
+            setDescription('');
+            setTimeout(() => navigate('/'), 1500);
         } catch (err) {
             setError("Error server connection.", err);
         } finally {
@@ -35,20 +44,20 @@ function CreateScene() {
             <div className={styles.card}>
                 <h1 className={styles.title}>New scene</h1>
 
-                    {error && <div className="text-red-500 mb-4">{error}</div>}
+                <FeedbackMessage error={error} success={success}/>
 
                 <form onSubmit={handleSubmit}>
                     <label className={styles.label}>Scene name</label>
-                    <input 
+                    <input
                         className={styles.input}
                         placeholder="Name exemple"
                         value={name}
-                        onChange={(e) => setName(e.target.value) }
+                        onChange={(e) => setName(e.target.value)}
                         disabled={loading}
                     />
 
                     <label className={styles.label}>Description</label>
-                    <textarea 
+                    <textarea
                         className={styles.textArea}
                         placeholder="Description exemple"
                         value={description}

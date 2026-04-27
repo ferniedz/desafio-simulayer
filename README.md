@@ -96,6 +96,6 @@ node modules, public (favicon.svg e icons.svg), src (que contém os assets, comp
 O programa implementa os seguintes diferenciais solicitados no desafio: 
 
 - Interface polida e responsiva;
-- Paginação na listagem de cenas;
+- Paginação na listagem de cenas e na lsitagem de personagens;
 - README com decisões técnicas;
 - Commits com mensagens claras.
